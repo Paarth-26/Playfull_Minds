@@ -16,35 +16,75 @@ document.addEventListener('DOMContentLoaded', () => {
                     { word: 'cat', hint: 'A small pet that says meow' },
                     { word: 'sun', hint: 'The bright star in our sky' },
                     { word: 'tree', hint: 'It has roots, a trunk, and leaves' },
-                    { word: 'book', hint: 'Something you read' }
+                    { word: 'book', hint: 'Something you read' },
+                    { word: 'fish', hint: 'It swims in the water' },
+                    { word: 'frog', hint: 'A green animal that hops' },
+                    { word: 'cake', hint: 'A sweet treat for birthdays' },
+                    { word: 'lamp', hint: 'It gives light in a room' },
+                    { word: 'bird', hint: 'An animal that can fly' },
+                    { word: 'milk', hint: 'A white drink from cows' },
+                    { word: 'hand', hint: 'You use this to wave hello' },
+                    { word: 'star', hint: 'A light in the night sky' }
                 ],
                 2: [
-                    { word: 'apple', hint: 'A red or green fruit that grows on trees' },
+                    { word: 'apple', hint: 'A red or green fruit' },
                     { word: 'water', hint: 'You drink it every day' },
                     { word: 'green', hint: 'The color of grass' },
-                    { word: 'happy', hint: 'The opposite of sad' }
+                    { word: 'happy', hint: 'The opposite of sad' },
+                    { word: 'bread', hint: 'You use this to make a sandwich' },
+                    { word: 'cloud', hint: 'A white fluffy thing in the sky' },
+                    { word: 'grape', hint: 'A small purple or green fruit' },
+                    { word: 'plane', hint: 'It flies people across the world' },
+                    { word: 'smile', hint: 'What you do when you are happy' },
+                    { word: 'house', hint: 'A place where people live' },
+                    { word: 'clock', hint: 'It tells you what time it is' },
+                    { word: 'ocean', hint: 'A giant body of salt water' }
                 ],
                 3: [
                     { word: 'circle', hint: 'A round shape with no corners' },
                     { word: 'yellow', hint: 'The color of a banana' },
-                    { word: 'purple', hint: 'A color made by mixing red and blue' },
-                    { word: 'family', hint: 'People who love and live with you' }
+                    { word: 'purple', hint: 'Mixing red and blue makes this' },
+                    { word: 'family', hint: 'People who love and live with you' },
+                    { word: 'garden', hint: 'A place where flowers grow' },
+                    { word: 'rocket', hint: 'It travels to the moon' },
+                    { word: 'turtle', hint: 'An animal with a hard shell' },
+                    { word: 'window', hint: 'You look through it to see outside' },
+                    { word: 'cheese', hint: 'A yellow food that mice love' },
+                    { word: 'school', hint: 'A place where you learn' },
+                    { word: 'dragon', hint: 'A magical creature that breathes fire' },
+                    { word: 'monkey', hint: 'A funny animal that loves bananas' }
                 ],
                 4: [
                     { word: 'banana', hint: 'A long yellow fruit' },
                     { word: 'planet', hint: 'Earth is one of these' },
-                    { word: 'rocket', hint: 'A ship that travels to space' },
-                    { word: 'rainbow', hint: 'Colorful arc seen after rain' }
+                    { word: 'rainbow', hint: 'Colorful arc seen after rain' },
+                    { word: 'bicycle', hint: 'Something with two wheels you ride' },
+                    { word: 'elephant', hint: 'A huge animal with a trunk' },
+                    { word: 'butterfly', hint: 'A colorful insect with wings' },
+                    { word: 'dinosaur', hint: 'A giant lizard from long ago' },
+                    { word: 'mountain', hint: 'A very high hill' },
+                    { word: 'treasure', hint: 'Gold and jewels hidden in a chest' },
+                    { word: 'keyboard', hint: 'Used to type on a computer' },
+                    { word: 'painting', hint: 'A picture made with colors' },
+                    { word: 'volcano', hint: 'A mountain that erupts with lava' }
                 ],
                 5: [
-                    { word: 'computer', hint: 'A machine you use to play and learn' },
-                    { word: 'keyboard', hint: 'It has keys you press to type' },
-                    { word: 'strawberry', hint: 'A red fruit with tiny seeds outside' },
-                    { word: 'dinosaur', hint: 'A huge reptile from long ago' }
+                    { word: 'computer', hint: 'A machine for games and work' },
+                    { word: 'strawberry', hint: 'A red fruit with tiny seeds' },
+                    { word: 'astronaut', hint: 'Someone who travels in space' },
+                    { word: 'lightning', hint: 'Bright flash in a storm' },
+                    { word: 'adventure', hint: 'An exciting and fun trip' },
+                    { word: 'discovery', hint: 'Finding something new' },
+                    { word: 'knowledge', hint: 'What you have when you learn' },
+                    { word: 'chocolate', hint: 'A brown sweet treat' },
+                    { word: 'umbrella', hint: 'Keeps you dry when it rains' },
+                    { word: 'telescope', hint: 'Used to look at far away stars' },
+                    { word: 'universe', hint: 'Everything in space and time' },
+                    { word: 'creative', hint: 'Having great new ideas' }
                 ]
             };
 
-            this.maxLevel = Math.max(...Object.keys(this.wordPools).map(Number));
+            this.maxLevel = 5;
             this.currentItem = null;
             this.level = 1;
             this.timer = null;
@@ -72,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         startTimer() {
             clearInterval(this.timer);
-            this.timeLeft = Math.max(8, 14 - this.level);
+            this.timeLeft = Math.max(8, 16 - this.level);
             this.timerElement.textContent = `Time: ${this.timeLeft}`;
             this.timer = setInterval(() => {
                 this.timeLeft--;
@@ -133,16 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.mgr.speak(`Awesome! You've reached level ${this.level}.`);
                 }
                 this.checkBadges();
-            } else if (userAnswer === null) {
-                this.mgr.playSound('incorrect');
-                this.mgr.setCharacterExpression('sad');
-                const message = `Time's up! The correct spelling is "${correctWord}".`;
-                this.mgr.showPopup(false, "Time's Up!", message, () => this.nextWord());
-                this.mgr.speak(message);
             } else {
                 this.mgr.playSound('incorrect');
                 this.mgr.setCharacterExpression('sad');
-                const message = `Not quite! The correct spelling is "${correctWord}".`;
+                const message = userAnswer === null ? `Time's up! It was "${correctWord}".` : `Not quite! It was "${correctWord}".`;
                 this.mgr.showPopup(false, 'Oops!', message, () => this.nextWord());
                 this.mgr.speak(message);
             }
@@ -151,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleSubmit() {
             const userAnswer = this.answerElement.value.trim().toLowerCase();
             if (userAnswer === '') {
-                this.mgr.speak("Please type your answer first.");
+                this.mgr.speak("Type your answer first.");
                 this.answerElement.focus();
                 return;
             }

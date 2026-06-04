@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
         dashboardScore.textContent = mgr.score;
         dashboardStars.textContent = mgr.stars;
 
+        // Load API Key to Dashboard input
+        const apiKeyInput = document.getElementById('dashboard-api-key');
+        if (apiKeyInput) {
+            apiKeyInput.value = localStorage.getItem('gemini-api-key') || '';
+        }
+
         dashboardBadges.innerHTML = ''; // Clear previous badges
         if (mgr.badges.length > 0) {
             mgr.badges.forEach(badgeId => {
@@ -55,6 +61,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Make it globally accessible so script.js can call it
     window.loadFeedback = loadFeedback;
+
+    // Save API Key from Dashboard
+    const saveKeyBtn = document.getElementById('save-dashboard-key');
+    if (saveKeyBtn) {
+        saveKeyBtn.addEventListener('click', () => {
+            const newKey = document.getElementById('dashboard-api-key').value.trim();
+            if (newKey) {
+                localStorage.setItem('gemini-api-key', newKey);
+                alert('API Key saved successfully! 🪄');
+            } else {
+                localStorage.removeItem('gemini-api-key');
+                alert('API Key cleared.');
+            }
+        });
+    }
 
     clearProgressBtn.addEventListener('click', () => {
         if (confirm('Are you sure you want to clear all progress and feedback? This cannot be undone.')) {

@@ -9,7 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
             this.levelElement = document.getElementById('level');
             this.timerElement = document.getElementById('timer');
 
-            this.words = ['apple', 'banana', 'orange', 'grape', 'strawberry', 'planet', 'rocket', 'circle', 'family', 'happy'];
+            this.words = [
+                'apple', 'banana', 'orange', 'grape', 'strawberry', 'planet', 'rocket', 'circle', 'family', 'happy',
+                'ocean', 'mountain', 'rainbow', 'treasure', 'volcano', 'butterfly', 'dinosaur', 'astronaut', 'lightning', 'adventure',
+                'computer', 'keyboard', 'telescope', 'universe', 'discovery', 'knowledge', 'chocolate', 'umbrella', 'bicycle', 'airplane',
+                'elephant', 'giraffe', 'octopus', 'whisper', 'freedom', 'glitter', 'journey', 'magical', 'monster', 'perfect',
+                'python', 'program', 'science', 'history', 'weather', 'balloon', 'feather', 'diamond', 'crystal', 'holiday',
+                'island', 'jungle', 'kitchen', 'library', 'morning', 'nestle', 'penguin', 'quality', 'respect', 'silence'
+            ];
+            
             this.currentWord = '';
             this.level = 1;
             this.timer = null;
@@ -33,9 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         scrambleWord(word) {
             let scrambled = word.split('').sort(() => 0.5 - Math.random()).join('');
-            while (scrambled === word) {
-                scrambled = word.split('').sort(() => 0.5 - Math.random()).join('');
-            }
+            // Ensure it's actually scrambled
+            if (scrambled === word && word.length > 1) return this.scrambleWord(word);
             return scrambled;
         }
 
@@ -58,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.answerElement.disabled = false;
             this.submitButton.disabled = false;
             
+            // Pick a random word from the large pool
             this.currentWord = this.words[Math.floor(Math.random() * this.words.length)];
             const scrambled = this.scrambleWord(this.currentWord);
             this.scrambledWordElement.textContent = scrambled;
@@ -90,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.mgr.setCharacterExpression('happy');
                 this.mgr.addScore(1);
                 this.mgr.addStar(1);
-                this.mgr.showPopup(true, 'Correct!', `You unscrambled it! The word was "${this.currentWord}".`, () => this.generateWord());
+                this.mgr.showPopup(true, 'Correct!', `You unscrambled it! "${this.currentWord}" is right.`, () => this.generateWord());
                 
                 if (this.mgr.gameScore > 0 && this.mgr.gameScore % 5 === 0) {
                     this.level++;

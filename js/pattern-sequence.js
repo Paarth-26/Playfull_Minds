@@ -11,19 +11,39 @@ document.addEventListener('DOMContentLoaded', () => {
             this.patterns = {
                 1: [
                     { sequence: ['A', 'B', 'A', 'B'], options: ['A', 'B', 'C'], answer: 'A' },
-                    { sequence: [1, 2, 3, 1, 2], options: [1, 2, 3], answer: 3 }
+                    { sequence: [1, 2, 1, 2], options: [1, 2, 3], answer: 1 },
+                    { sequence: ['🍎', '🍌', '🍎', '🍌'], options: ['🍎', '🍌', '🍇'], answer: '🍎' },
+                    { sequence: ['Red', 'Blue', 'Red', 'Blue'], options: ['Red', 'Blue', 'Green'], answer: 'Red' },
+                    { sequence: ['Sun', 'Moon', 'Sun', 'Moon'], options: ['Sun', 'Moon', 'Star'], answer: 'Sun' },
+                    { sequence: ['Up', 'Down', 'Up', 'Down'], options: ['Up', 'Down', 'Left'], answer: 'Up' }
                 ],
                 2: [
-                    { sequence: ['Red', 'Blue', 'Red', 'Blue'], options: ['Red', 'Blue', 'Green'], answer: 'Red' },
-                    { sequence: ['Up', 'Down', 'Up', 'Down'], options: ['Up', 'Down', 'Left'], answer: 'Up' }
+                    { sequence: [1, 2, 3, 1, 2], options: [1, 2, 3], answer: 3 },
+                    { sequence: ['A', 'B', 'C', 'A', 'B'], options: ['A', 'B', 'C'], answer: 'C' },
+                    { sequence: ['🐶', '🐱', '🐭', '🐶', '🐱'], options: ['🐶', '🐱', '🐭'], answer: '🐭' },
+                    { sequence: [10, 20, 30, 10, 20], options: [30, 40, 50], answer: 30 },
+                    { sequence: ['Mon', 'Tue', 'Wed', 'Mon', 'Tue'], options: ['Wed', 'Thu', 'Fri'], answer: 'Wed' },
+                    { sequence: ['Red', 'Yellow', 'Green', 'Red', 'Yellow'], options: ['Green', 'Blue', 'Pink'], answer: 'Green' }
                 ],
                 3: [
                     { sequence: [1, 1, 2, 2, 3], options: [1, 2, 3], answer: 3 },
-                    { sequence: ['A', 'A', 'B', 'B', 'C'], options: ['A', 'B', 'C'], answer: 'C' }
+                    { sequence: ['A', 'A', 'B', 'B', 'C'], options: ['A', 'B', 'C'], answer: 'C' },
+                    { sequence: ['Big', 'Small', 'Big', 'Small', 'Big'], options: ['Big', 'Small', 'Medium'], answer: 'Small' },
+                    { sequence: [2, 4, 6, 8, 10], options: [11, 12, 14], answer: 12 },
+                    { sequence: ['A', 'C', 'E', 'G', 'I'], options: ['J', 'K', 'L'], answer: 'K' },
+                    { sequence: ['⚽', '🏀', '⚽', '🏀', '⚽'], options: ['🏀', '🎾', '🏐'], answer: '🏀' }
+                ],
+                4: [
+                    { sequence: [5, 10, 15, 20, 25], options: [25, 30, 35], answer: 30 },
+                    { sequence: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], options: ['Jun', 'Jul', 'Aug'], answer: 'Jun' },
+                    { sequence: ['Red', 'Blue', 'Yellow', 'Red', 'Blue'], options: ['Yellow', 'Green', 'Orange'], answer: 'Yellow' },
+                    { sequence: ['Square', 'Circle', 'Triangle', 'Square', 'Circle'], options: ['Triangle', 'Star', 'Diamond'], answer: 'Triangle' },
+                    { sequence: [1, 3, 5, 7, 9], options: [10, 11, 13], answer: 11 },
+                    { sequence: ['North', 'South', 'East', 'West', 'North'], options: ['South', 'Up', 'Down'], answer: 'South' }
                 ]
             };
             
-            this.maxLevel = Math.max(...Object.keys(this.patterns).map(Number));
+            this.maxLevel = 4;
             this.currentPattern = null;
             this.level = 1;
             this.timer = null;
@@ -55,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             this.patternElement.innerHTML = '';
             const questionText = document.createElement('p');
-            questionText.textContent = 'What comes next in the sequence?';
+            questionText.textContent = 'What comes next?';
             questionText.classList.add('sequence-question', 'mb-4', 'text-xl', 'font-bold');
 
             const track = document.createElement('div');
@@ -109,14 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (this.levelElement) this.levelElement.textContent = `Level: ${this.level}`;
                 }
                 this.checkBadges();
-            } else if (selectedOption === null) {
-                this.mgr.playSound('incorrect');
-                this.mgr.setCharacterExpression('sad');
-                this.mgr.showPopup(false, "Time's Up!", `The correct answer was ${this.currentPattern.answer}.`, () => this.generatePattern());
             } else {
                 this.mgr.playSound('incorrect');
                 this.mgr.setCharacterExpression('sad');
-                this.mgr.showPopup(false, 'Not Quite!', `The correct answer was ${this.currentPattern.answer}.`, () => this.generatePattern());
+                const msg = selectedOption === null ? "Time's Up!" : "Not Quite!";
+                this.mgr.showPopup(false, msg, `The answer was ${this.currentPattern.answer}.`, () => this.generatePattern());
             }
         }
 
